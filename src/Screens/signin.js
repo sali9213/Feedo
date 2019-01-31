@@ -172,7 +172,7 @@ export default class SignInScreen extends React.Component{
 const styles = StyleSheet.create({
     textbox: {
         height: 50, 
-        margin: 10, 
+        marginVertical: 10, 
         borderColor:'black',
         borderWidth: 1,
         padding: 10,
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
         alignItems: 'center', 
         justifyContent: 'center', 
         height: 50,
-        margin: 10
+        marginVertical: 10
       },
       backgroundImage: {
         flex: 1,

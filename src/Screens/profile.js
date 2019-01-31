@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, TextInput, Text, TouchableOpacity } from "react-native";
 import { SignInScreen } from "./signin";
-import { styles } from "../Styles/styles";
+import { stylesheet } from "../Styles/stylesheet";
 
 
 export default class ProfileScreen extends React.Component{
@@ -16,7 +16,7 @@ export default class ProfileScreen extends React.Component{
             <View>
                 <Text>Logged In</Text>
                 <TouchableOpacity onPress={() => navigate('Auth', {})}>
-                    <View style = {styles.buttonContainer}>
+                    <View style = {stylesheet.buttonContainer}>
                         <Text style = {{color: 'white'}}>LOGIN</Text>
                     </View>
                 </TouchableOpacity>

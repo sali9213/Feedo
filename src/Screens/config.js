@@ -1,6 +1,7 @@
 import React from 'react'
-import { View, TextInput, TouchableOpacity, Text, AsyncStorage, getAttributem, ImageBackground } from "react-native";
-import { styles } from "../Styles/styles";
+import { View, TextInput, TouchableOpacity, Text,
+     AsyncStorage, StyleSheet, Modal, TouchableHighlight } from "react-native";
+import { stylesheet } from "../Styles/stylesheet";
 import { SplashScreen } from 'expo';
 
 
@@ -10,7 +11,8 @@ export default class ConfigScreen extends React.Component{
         super(props)
         this.state = {
             IPAddress: '',
-            DBKey: ''
+            DBKey: '',
+            modalVisible: false
         }
         console.log('constructed')
 
@@ -18,10 +20,12 @@ export default class ConfigScreen extends React.Component{
 
     componentDidMount(){
         this._retrieveData();
-        console.log(this.state.IPAddress + ' ' + this.state.DBKey)
-        console.log('Loaded')
 
     }
+
+    setModalVisible(visible) {
+        this.setState({modalVisible: visible});
+      }
 
     static navigationOptions = {
         title : 'Config',
@@ -29,24 +33,59 @@ export default class ConfigScreen extends React.Component{
 
     render(){
         return(
-            <ImageBackground source={require('../../assets/loginbackground.jpg')} style={{width: '100%', height: '100%'}} >
-                <View>
+            <View style={{alignItems: 'center'}}>
+                <View style={{width: '90%'}}>
                     <Text style={{paddingLeft: 10}}>IP Address:</Text>
-                    <TextInput placeholder='IP Address' name='IPAddress' style={styles.textbox} onChangeText={(val) => this.setState({IPAddress: val})} value={this.state.IPAddress}></TextInput>
+                    <TextInput placeholder='IP Address' name='IPAddress' style={styles.textbox}  value={this.state.IPAddress} onChangeText={(val) => this.setState({IPAddress: val})}></TextInput>
                     <Text style={{paddingLeft: 10}}>DBKey:</Text>
-                    <TextInput placeholder='Database Key' name='DBKey' style={styles.textbox} onChangeText={(val) => this.setState({DBKey: val})} value={this.state.DBKey}></TextInput>
+                    <TextInput placeholder='Database Key' name='DBKey' style={stylesheet.textbox}  value={this.state.DBKey} onChangeText={(val) => this.setState({DBKey: val})}></TextInput>
                     <TouchableOpacity onPress={() =>  this._storeData(this.state.IPAddress, this.state.DBKey)} >
-                            <View style = {styles.buttonContainer}>
+                            <View style = {stylesheet.buttonContainer}>
                                 <Text style = {{color: 'white'}}>SAVE</Text>
                             </View>
                     </TouchableOpacity>
                 </View> 
-            </ImageBackground>
+
+
+            <Modal
+                animationType="slide"
+                transparent={false}
+                visible={this.state.modalVisible}
+                onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                }}>
+                <View style={styles.modalBackground}>
+                    <View style={styles.DialogWrapper}>
+
+                    </View>
+                </View>
+
+      <TouchableHighlight
+                onPress={() => {
+                this.setModalVisible(false);
+                }}>
+                <Text>hide Modal</Text>
+            </TouchableHighlight>
+         
+            </Modal>
+
+            <TouchableHighlight
+                onPress={() => {
+                this.setModalVisible(true);
+                }}>
+                <Text>Show Modal</Text>
+            </TouchableHighlight>
+
+            
+            </View>
+         
         );
     }
 
     _storeData = async (ipaddress, dbkey) => {
         try {
+        if(ipaddress == null) ipaddress = '';
+        if(dbkey == null) dbkey = '';
           await AsyncStorage.setItem('ipaddress', ipaddress);
           await AsyncStorage.setItem('dbkey', dbkey)
         } catch (error) {
@@ -67,3 +106,28 @@ export default class ConfigScreen extends React.Component{
         }
       };
 }
+
+
+
+const styles = StyleSheet.create({
+    modalBackground: {
+      flex: 1,
+      alignItems: 'center',
+      flexDirection: 'column',
+      justifyContent: 'space-around',
+      backgroundColor: '#00000040'
+    },
+    DialogWrapper: {
+      backgroundColor: '#FFFFFF',
+      height: 150,
+      width: 300,
+      borderRadius: 10,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-around'
+    },
+    textbox: {
+        height: 50, 
+        padding: 10,
+    }
+  });
