@@ -1,31 +1,66 @@
 import React from 'react'
 import { View, TextInput, TouchableOpacity, Text,
-     AsyncStorage, StyleSheet, Modal, TouchableHighlight } from "react-native";
+     AsyncStorage, StyleSheet, Modal, TouchableHighlight} from "react-native";
 import { stylesheet } from "../Styles/stylesheet";
 import { SplashScreen } from 'expo';
-
+import Dialog from 'react-native-dialog';
+import { TextField } from "react-native-material-textfield";
 
 export default class ConfigScreen extends React.Component{
 
     constructor(props){
         super(props)
         this.state = {
-            IPAddress: '',
+            IPAddress: '',  
             DBKey: '',
-            modalVisible: false
+            showDialog: false,
+            currentEditTitle: '',
+            currentEditName: '',
+            currentEditValue: '',
+            showIPDialog: false,
+            showDBDialog: false
         }
-        console.log('constructed')
-
     }
 
     componentDidMount(){
         this._retrieveData();
 
+    
     }
 
-    setModalVisible(visible) {
-        this.setState({modalVisible: visible});
+    
+   showDialog(visible, curredit, currvalue) {
+    this.setState({
+        showDialog: visible,
+        currentEditName: curredit,
+        currentEditValue: currvalue
+     });
+  }
+
+   saveData(curredit, currvalue) {
+        this.setState({
+            [curredit]: currvalue
+        })
+        
+        this.showDialog(false, '', '')
+    }
+
+   editIP(visible, curredit) {
+        this.setState({
+            showDialog: visible,
+            currentEditTitle: 'Web API URL',
+            currentEditName: curredit,
+            currentEditValue: this.state[curredit]
+         });
       }
+
+    editDB(visible, curredit) {
+        this.setState({
+            showDialog: visible,
+            currentEditTitle: 'Data Base Key',
+            currentEditName: curredit
+            });
+    }
 
     static navigationOptions = {
         title : 'Config',
@@ -35,47 +70,31 @@ export default class ConfigScreen extends React.Component{
         return(
             <View style={{alignItems: 'center'}}>
                 <View style={{width: '90%'}}>
-                    <Text style={{paddingLeft: 10}}>IP Address:</Text>
-                    <TextInput placeholder='IP Address' name='IPAddress' style={styles.textbox}  value={this.state.IPAddress} onChangeText={(val) => this.setState({IPAddress: val})}></TextInput>
-                    <Text style={{paddingLeft: 10}}>DBKey:</Text>
-                    <TextInput placeholder='Database Key' name='DBKey' style={stylesheet.textbox}  value={this.state.DBKey} onChangeText={(val) => this.setState({DBKey: val})}></TextInput>
-                    <TouchableOpacity onPress={() =>  this._storeData(this.state.IPAddress, this.state.DBKey)} >
-                            <View style = {stylesheet.buttonContainer}>
-                                <Text style = {{color: 'white'}}>SAVE</Text>
-                            </View>
+
+                    <TouchableOpacity onPress={() => this.editIP(true, 'IPAddress')} >
+                        <View pointerEvents="none">
+                    <TextField label="Web API URL" editable={false} value={this.state.IPAddress} ></TextField>
+                        </View>
                     </TouchableOpacity>
+
+
+                    <TouchableOpacity onPress={() => this.editDB(true, 'DBKey')} >
+                        <View pointerEvents="none">     
+                            <TextField label="Databse Kay" editable={false} value={this.state.DBKey}></TextField>
+                        </View>
+                    </TouchableOpacity>
+
                 </View> 
 
-
-            <Modal
-                animationType="slide"
-                transparent={false}
-                visible={this.state.modalVisible}
-                onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
-                }}>
-                <View style={styles.modalBackground}>
-                    <View style={styles.DialogWrapper}>
-
-                    </View>
+                <View>
+                    <Dialog.Container visible={this.state.showDialog}>
+                        <Dialog.Title children=''>{ this.state.currentEditTitle }</Dialog.Title>
+                        {/* <TextInput value={this.state.currentValue} style={{borderColor: 'black', borderWidth: 1, borderRadius: 5, height: 40, marginHorizontal: 10, paddingHorizontal: 5, marginBottom: 5 }}></TextInput> */}
+                        <Dialog.Input value={this.state.currentEditValue} onChangeText={(val) => this.setState({currentEditValue: val})}></Dialog.Input>
+                        <Dialog.Button label="Cancel" onPress={() => this.showDialog(false, '', '')} />
+                        <Dialog.Button label="OK" onPress={() => this.saveData(this.state.currentEditName, this.state.currentEditValue)} />
+                    </Dialog.Container>
                 </View>
-
-      <TouchableHighlight
-                onPress={() => {
-                this.setModalVisible(false);
-                }}>
-                <Text>hide Modal</Text>
-            </TouchableHighlight>
-         
-            </Modal>
-
-            <TouchableHighlight
-                onPress={() => {
-                this.setModalVisible(true);
-                }}>
-                <Text>Show Modal</Text>
-            </TouchableHighlight>
-
             
             </View>
          
