@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, TextInput, Text, TouchableOpacity } from "react-native";
+import { View, TextInput, Text, TouchableOpacity, AsyncStorage } from "react-native";
 import { SignInScreen } from "./signin";
 import { stylesheet } from "../Styles/stylesheet";
 
@@ -10,11 +10,23 @@ export default class ProfileScreen extends React.Component{
         title : 'Logged In',
     };
 
+    constructor(props){
+        super(props)
+
+        this.state = {
+            user: ''
+        }
+    }
+
+     componentDidMount = async() =>{
+        await this._init()
+    }
+
     render(){
         const { navigate } = this.props.navigation;
         return(
             <View>
-                <Text>Logged In</Text>
+                <Text>{ this.state.user.EmployeeName }</Text>
                 <TouchableOpacity onPress={() => navigate('Auth', {})}>
                     <View style = {stylesheet.buttonContainer}>
                         <Text style = {{color: 'white'}}>LOGIN</Text>
@@ -23,4 +35,16 @@ export default class ProfileScreen extends React.Component{
             </View> 
         );
     }
+
+
+    _init = async () => {
+        try {
+        this.setState({
+            user: JSON.parse(await AsyncStorage.getItem('user'))
+        }) 
+        } catch (error) {
+          // Error retrieving data
+          console.error(error)
+        }
+      };
 }

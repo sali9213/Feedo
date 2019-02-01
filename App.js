@@ -18,7 +18,7 @@ export default class App extends React.Component{
 
   render(){
       return(
-        <AppContainer />
+        <AppContainer /> //Will need to add auth loadign navigator
       );
   }
 

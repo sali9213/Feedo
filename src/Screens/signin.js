@@ -18,11 +18,14 @@ export default class SignInScreen extends React.Component{
             isLoaded: false,
             loading: false,
             requestFailed: false,
-            IPAddress: '',
-            DBkey: ''
         }
-      
-        // this._retrieveData();
+
+        this.IPAddress = ''
+        this.DBKey = ''
+
+        this._retrieveData = this._retrieveData.bind(this)
+        this.fetchdata = this.fetchdata.bind(this)
+        
     }
 
     static navigationOptions = {
@@ -32,16 +35,27 @@ export default class SignInScreen extends React.Component{
 
     _retrieveData = async () => {
         try {
-        console.log('Attempting to GET data')
-        this.setState({
-            IPAddress: await AsyncStorage.getItem('ipaddress'),
-            DBKey: await AsyncStorage.getItem('dbkey')
-        })
+            this.IPAddress = await AsyncStorage.getItem('ipaddress')
+            this.DBKey = await AsyncStorage.getItem('dbkey')
+        // this.setState({
+        //     IPAddress: await AsyncStorage.getItem('ipaddress'),
+        //     DBKey: await AsyncStorage.getItem('dbkey')
+        // })
         } catch (error) {
           // Error retrieving data
           console.error(error)
         }
       };
+
+    _saveUser = async (user) => {
+    try {
+    if(user == null) user = '';
+        await AsyncStorage.setItem('user', user);
+    } catch (error) {
+        // Error saving data
+        console.error(error)
+    }
+    };
 
     componentDidMount() {
         SplashScreen.hide();
@@ -51,15 +65,20 @@ export default class SignInScreen extends React.Component{
         this.setState({loading: false})
     }
 
+
     async handleClick (user, pass) {
 
-        this.setState({loading: true})
+        await this._retrieveData()
+
+        await this.setState({loading: false})
         const result = await this.fetchdata(user, pass);
         await this.setState({loading: false})
 
         if(result != null && this.state.isLoaded && !this.state.requestFailed){
 
-            this.props.navigation.navigate('App')
+        this._saveUser(JSON.stringify(result))
+        this.props.navigation.navigate('App')
+            
 
         } else if(!this.state.requestFailed && result == null && !this.state.isLoaded){
 
@@ -114,18 +133,25 @@ export default class SignInScreen extends React.Component{
     }
 
     async fetchdata (user, pass) {
-        console.log("fetching");
-        const url = 'http://192.168.1.26:8919/TSBE/User/FSigninMobileApp';
+        // const url = 'http://192.168.1.26:8919/TSBE/User/FSigninMobileApp';
+
+          //Only for debugging. Removes need of entering user and pass 
+          user = 'superuser'
+          pass = 'techSupport20177'
+
+
+        const url = 'http://' + this.IPAddress + '/TSBE/User/FSigninMobileApp';
         var base64 = require("base-64");
         let base64String = 'Basic ' + base64.encode(user+":"+pass);
 
+        this.setState({requestFailed: false})
         let result = await fetch(url, {method: "POST", 
             headers: {
                 "Accept": 'application/json',
                 "Content-Type": 'application/json',
                 "Authorization": base64String,
                 "app": "6289",
-                "ts": "ts",
+                "ts": this.DBKey,
         },
         body: JSON.stringify({
             "Browser": "Native_Platform",
@@ -163,7 +189,6 @@ export default class SignInScreen extends React.Component{
 
         });
         
-        console.log('returning result')
         return result;
     }  
 

@@ -13,52 +13,51 @@ export default class ConfigScreen extends React.Component{
         this.state = {
             IPAddress: '',  
             DBKey: '',
-            showDialog: false,
-            currentEditTitle: '',
-            currentEditName: '',
-            currentEditValue: '',
+            tempIPAddress: '',
+            tempDBKey: '',
             showIPDialog: false,
             showDBDialog: false
         }
     }
 
-    componentDidMount(){
-        this._retrieveData();
-
-    
+    componentDidMount = async() =>{
+        await this._retrieveData();
     }
 
-    
-   showDialog(visible, curredit, currvalue) {
-    this.setState({
-        showDialog: visible,
-        currentEditName: curredit,
-        currentEditValue: currvalue
-     });
-  }
 
-   saveData(curredit, currvalue) {
+    saveIPData() {
         this.setState({
-            [curredit]: currvalue
+            IPAddress: this.state.tempIPAddress,
+            showIPDialog: false
+        }, function() {
+
+            this._storeData(this.state.IPAddress, this.state.DBKey)
+
         })
-        
-        this.showDialog(false, '', '')
     }
 
-   editIP(visible, curredit) {
+    saveDBData() {
         this.setState({
-            showDialog: visible,
-            currentEditTitle: 'Web API URL',
-            currentEditName: curredit,
-            currentEditValue: this.state[curredit]
+            DBKey: this.state.tempDBKey,
+            showDBDialog: false
+        }, function() {
+
+            this._storeData(this.state.IPAddress, this.state.DBKey)
+
+        })
+    }
+
+   editIP(visible) {
+        this.setState({
+            showIPDialog: visible,
+            tempIPAddress: this.state.IPAddress
          });
       }
 
-    editDB(visible, curredit) {
+    editDB(visible) {
         this.setState({
-            showDialog: visible,
-            currentEditTitle: 'Data Base Key',
-            currentEditName: curredit
+            showDBDialog: visible,
+            tempDBKey: this.state.DBKey
             });
     }
 
@@ -71,28 +70,38 @@ export default class ConfigScreen extends React.Component{
             <View style={{alignItems: 'center'}}>
                 <View style={{width: '90%'}}>
 
-                    <TouchableOpacity onPress={() => this.editIP(true, 'IPAddress')} >
+                    <TouchableOpacity onPress={() => this.editIP(true)} >
                         <View pointerEvents="none">
                     <TextField label="Web API URL" editable={false} value={this.state.IPAddress} ></TextField>
                         </View>
                     </TouchableOpacity>
 
 
-                    <TouchableOpacity onPress={() => this.editDB(true, 'DBKey')} >
+                    <TouchableOpacity onPress={() => this.editDB(true)} >
                         <View pointerEvents="none">     
-                            <TextField label="Databse Kay" editable={false} value={this.state.DBKey}></TextField>
+                            <TextField label="Databse Key" editable={false} value={this.state.DBKey}></TextField>
                         </View>
                     </TouchableOpacity>
 
                 </View> 
 
                 <View>
-                    <Dialog.Container visible={this.state.showDialog}>
-                        <Dialog.Title children=''>{ this.state.currentEditTitle }</Dialog.Title>
+                    <Dialog.Container visible={this.state.showIPDialog}>
+                        <Dialog.Title children=''>IP Address</Dialog.Title>
                         {/* <TextInput value={this.state.currentValue} style={{borderColor: 'black', borderWidth: 1, borderRadius: 5, height: 40, marginHorizontal: 10, paddingHorizontal: 5, marginBottom: 5 }}></TextInput> */}
-                        <Dialog.Input value={this.state.currentEditValue} onChangeText={(val) => this.setState({currentEditValue: val})}></Dialog.Input>
-                        <Dialog.Button label="Cancel" onPress={() => this.showDialog(false, '', '')} />
-                        <Dialog.Button label="OK" onPress={() => this.saveData(this.state.currentEditName, this.state.currentEditValue)} />
+                        <Dialog.Input value={this.state.tempIPAddress} onChangeText={(val) => this.setState({tempIPAddress: val})}></Dialog.Input>
+                        <Dialog.Button label="Cancel" onPress={() => this.setState({showIPDialog: false})} />
+                        <Dialog.Button label="OK" onPress={() => this.saveIPData()} />
+                    </Dialog.Container>
+                </View>
+
+                 <View>
+                    <Dialog.Container visible={this.state.showDBDialog}>
+                        <Dialog.Title children=''>Data Base Key</Dialog.Title>
+                        {/* <TextInput value={this.state.currentValue} style={{borderColor: 'black', borderWidth: 1, borderRadius: 5, height: 40, marginHorizontal: 10, paddingHorizontal: 5, marginBottom: 5 }}></TextInput> */}
+                        <Dialog.Input value={this.state.tempDBKey} onChangeText={(val) => this.setState({tempDBKey: val})}></Dialog.Input>
+                        <Dialog.Button label="Cancel" onPress={() => this.setState({showDBDialog: false})} />
+                        <Dialog.Button label="OK" onPress={() => this.saveDBData()} />
                     </Dialog.Container>
                 </View>
             
