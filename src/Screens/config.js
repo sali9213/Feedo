@@ -125,13 +125,14 @@ export default class ConfigScreen extends React.Component{
       _retrieveData = async () => {
         try {
         this.setState({
-            IPAddress: await AsyncStorage.getItem('ipaddress'),
+            IPAddress:  await AsyncStorage.getItem('ipaddress'),
             DBKey: await AsyncStorage.getItem('dbkey')
         })
         } catch (error) {
           // Error retrieving data
           console.error(error)
         }
+
       };
 }
 

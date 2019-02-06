@@ -4,6 +4,7 @@ import { createStackNavigator, createSwitchNavigator, createAppContainer } from 
 import SignInScreen from './Screens/signin';
 import ProfileScreen from './Screens/profile';
 import ConfigScreen from "./Screens/config";
+import AuthLoading from "./Screens/authloading"
 
 
 
@@ -30,11 +31,11 @@ export const appContainer = createAppContainer(createSwitchNavigator(
     {
         App: AppStack,
         Auth: AuthStack,
-        // AuthLoading: AuthLoadingScreen
+        AuthLoading: AuthLoading
 
     },
     {
-        initialRouteName: 'Auth',
+        initialRouteName: 'AuthLoading',
     }
 ))
 

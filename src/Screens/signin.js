@@ -51,6 +51,8 @@ export default class SignInScreen extends React.Component{
     try {
     if(user == null) user = '';
         await AsyncStorage.setItem('user', user);
+        await AsyncStorage.setItem('username', this.state.username)
+        await AsyncStorage.setItem('password', this.state.password)
     } catch (error) {
         // Error saving data
         console.error(error)
