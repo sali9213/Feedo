@@ -23,7 +23,7 @@ export default class SignInScreen extends React.Component{
         this.IPAddress = ''
         this.DBKey = ''
 
-        this._retrieveData = this._retrieveData.bind(this)
+        this._retrieveAPIDetails = this._retrieveAPIDetails.bind(this)
         this.fetchdata = this.fetchdata.bind(this)
         
     }
@@ -33,7 +33,7 @@ export default class SignInScreen extends React.Component{
         header: null
     };
 
-    _retrieveData = async () => {
+    _retrieveAPIDetails = async () => {
         try {
             this.IPAddress = await AsyncStorage.getItem('ipaddress')
             this.DBKey = await AsyncStorage.getItem('dbkey')
@@ -72,11 +72,12 @@ export default class SignInScreen extends React.Component{
 
     async handleClick (user, pass) {
 
-        await this._retrieveData()
+        await this._retrieveAPIDetails()
 
-        this.setState({loading: false})
+        this.setState({loading: true})
         const result = await this.fetchdata(user, pass);
         this.setState({loading: false})
+        this.forceUpdate()
 
         if(result != null && this.state.isLoaded && !this.state.requestFailed){
 
@@ -85,12 +86,15 @@ export default class SignInScreen extends React.Component{
             
 
         } else if(!this.state.requestFailed && result == null && !this.state.isLoaded){
-
-            alert('Username or Password is incorrect');
+            setTimeout(() => {
+                alert('Username or Password is incorrect');
+              }, 600);
 
         } else if (this.state.requestFailed){
             
-            alert(result);
+            setTimeout(() => {
+                alert(result);
+              }, 600);
 
         }
 
@@ -139,9 +143,9 @@ export default class SignInScreen extends React.Component{
     async fetchdata (user, pass) {
         // const url = 'http://192.168.1.26:8919/TSBE/User/FSigninMobileApp';
 
-          //Only for debugging. Removes need of entering user and pass 
-          user = 'superuser'
-          pass = 'techSupport20177'
+        //   //Only for debugging. Removes need of entering user and pass 
+        //   user = 'superuser'
+        //   pass = 'techSupport20177'
 
 
         const url = 'http://' + this.IPAddress + '/TSBE/User/FSigninMobileApp';

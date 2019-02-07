@@ -28,10 +28,10 @@ export default class ProfileScreen extends React.Component{
         const { navigate } = this.props.navigation;
         return(
             <View>
-                <Text>{ this.state.user.EmployeeName }</Text>
+                <Text>EmployeeName: { this.state.user.EmployeeName }</Text>
                 <TouchableOpacity onPress={() => navigate('Auth', {})}>
                     <View style = {stylesheet.buttonContainer}>
-                        <Text style = {{color: 'white'}}>LOGIN</Text>
+                        <Text style = {{color: 'white'}}>Logout</Text>
                     </View>
                 </TouchableOpacity>
             </View> 

@@ -65,14 +65,17 @@ export default class AuthLoading extends React.Component{
 
 
         if(this.state.username == null || this.state.password == null) {
+            console.log('Not Logged In')
             this.props.navigation.navigate('Auth')
         } else {
             const result = await this.fetchdata();
 
             if(result != null && this.state.isLoaded && !this.state.requestFailed){
                 await this._saveUser(JSON.stringify(result))
+                console.log('Logged In')
                 this.props.navigation.navigate('App')
             } else {
+                console.log('Not Logegd In')
                 this.props.navigation.navigate('Auth')
             }
         }
