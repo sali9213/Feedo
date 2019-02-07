@@ -2,6 +2,7 @@ import React from 'react'
 import { View, TextInput, Text, TouchableOpacity, AsyncStorage } from "react-native";
 import { SignInScreen } from "./signin";
 import { stylesheet } from "../Styles/stylesheet";
+import { SplashScreen } from "expo";
 
 
 export default class ProfileScreen extends React.Component{
@@ -19,6 +20,7 @@ export default class ProfileScreen extends React.Component{
     }
 
      componentDidMount = async() =>{
+        SplashScreen.hide()
         await this._init()
     }
 

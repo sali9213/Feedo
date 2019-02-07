@@ -49,7 +49,9 @@ export default class SignInScreen extends React.Component{
 
     _saveUser = async (user) => {
     try {
-    if(user == null) user = '';
+    if(user == null)
+    { user = ''; }
+        console.log(this.state.username + ' ' + this.state.password )
         await AsyncStorage.setItem('user', user);
         await AsyncStorage.setItem('username', this.state.username)
         await AsyncStorage.setItem('password', this.state.password)
@@ -72,9 +74,9 @@ export default class SignInScreen extends React.Component{
 
         await this._retrieveData()
 
-        await this.setState({loading: false})
+        this.setState({loading: false})
         const result = await this.fetchdata(user, pass);
-        await this.setState({loading: false})
+        this.setState({loading: false})
 
         if(result != null && this.state.isLoaded && !this.state.requestFailed){
 
@@ -185,7 +187,7 @@ export default class SignInScreen extends React.Component{
 
         }).catch((error)=>{
 
-            console.log('error: ' + error);
+            console.error(error);
             this.setState({requestFailed: true})
             return error
 
