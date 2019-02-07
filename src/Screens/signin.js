@@ -1,6 +1,6 @@
 import React from "react";
-import { TextInput, View, Button, Text, Alert, TouchableOpacity,
-     ImageBackground, Image, ActivityIndicator, StyleSheet, AsyncStorage  } from "react-native";
+import { TextInput, View, Button, Text, TouchableOpacity,
+     ImageBackground, Image, ActivityIndicator, StyleSheet, AsyncStorage } from "react-native";
 // import { styles } from "../Styles/styles";
 import { base64 } from "base-64";
 import { SplashScreen } from "expo";
@@ -51,7 +51,6 @@ export default class SignInScreen extends React.Component{
     try {
     if(user == null)
     { user = ''; }
-        console.log(this.state.username + ' ' + this.state.password )
         await AsyncStorage.setItem('user', user);
         await AsyncStorage.setItem('username', this.state.username)
         await AsyncStorage.setItem('password', this.state.password)
@@ -69,36 +68,6 @@ export default class SignInScreen extends React.Component{
         this.setState({loading: false})
     }
 
-
-    async handleClick (user, pass) {
-
-        await this._retrieveAPIDetails()
-
-        this.setState({loading: true})
-        const result = await this.fetchdata(user, pass);
-        this.setState({loading: false})
-        this.forceUpdate()
-
-        if(result != null && this.state.isLoaded && !this.state.requestFailed){
-
-        this._saveUser(JSON.stringify(result))
-        this.props.navigation.navigate('App')
-            
-
-        } else if(!this.state.requestFailed && result == null && !this.state.isLoaded){
-            setTimeout(() => {
-                alert('Username or Password is incorrect');
-              }, 600);
-
-        } else if (this.state.requestFailed){
-            
-            setTimeout(() => {
-                alert(result);
-              }, 600);
-
-        }
-
-    }
 
 
     render(){
@@ -138,6 +107,37 @@ export default class SignInScreen extends React.Component{
             </ImageBackground>
 
             );
+    }
+  
+
+    async handleClick (user, pass) {
+
+        await this._retrieveAPIDetails()
+
+        this.setState({loading: true})
+        const result = await this.fetchdata(user, pass);
+        this.setState({loading: false})
+        this.forceUpdate()
+
+        if(result != null && this.state.isLoaded && !this.state.requestFailed){
+
+        this._saveUser(JSON.stringify(result))
+        this.props.navigation.navigate('App')
+            
+
+        } else if(!this.state.requestFailed && result == null && !this.state.isLoaded){
+            setTimeout(() => {
+                alert('Username or Password is incorrect');
+              }, 600);
+
+        } else if (this.state.requestFailed){
+            
+            setTimeout(() => {
+                alert(result);
+              }, 600);
+
+        }
+
     }
 
     async fetchdata (user, pass) {
