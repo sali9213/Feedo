@@ -89,8 +89,8 @@ export default class SignInScreen extends React.Component{
                 </View>
                 
                 <View style={{width: '80%', flex: 3, justifyContent: 'center'}}>
-                        <TextInput placeholder='USERNAME' placeholderTextColor='#93A0A7' name='username' style={styles.textbox} onChangeText={(val) => this.setState({username: val})}></TextInput>
-                        <TextInput placeholder='PASSWORD' placeholderTextColor='#93A0A7' name='password' secureTextEntry style={styles.textbox} onChangeText={(val) => this.setState({password: val})}></TextInput>
+                        <TextInput placeholder='USERNAME' autoCapitalize='none' placeholderTextColor='#93A0A7' name='username' style={styles.textbox} onChangeText={(val) => this.setState({username: val})}></TextInput>
+                        <TextInput placeholder='PASSWORD' autoCapitalize='none' placeholderTextColor='#93A0A7' name='password' secureTextEntry style={styles.textbox} onChangeText={(val) => this.setState({password: val})}></TextInput>
                         <TouchableOpacity onPress={() => this.handleClick(this.state.username, this.state.password)} ref='touch'>
                             <View style = {styles.buttonContainer}>
                                 <Text style = {{color: 'white'}}>LOGIN</Text>

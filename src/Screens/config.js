@@ -89,7 +89,7 @@ export default class ConfigScreen extends React.Component{
                     <Dialog.Container visible={this.state.showIPDialog}>
                         <Dialog.Title children=''>IP Address</Dialog.Title>
                         {/* <TextInput value={this.state.currentValue} style={{borderColor: 'black', borderWidth: 1, borderRadius: 5, height: 40, marginHorizontal: 10, paddingHorizontal: 5, marginBottom: 5 }}></TextInput> */}
-                        <Dialog.Input value={this.state.tempIPAddress} onChangeText={(val) => this.setState({tempIPAddress: val})}></Dialog.Input>
+                        <Dialog.Input value={this.state.tempIPAddress} onChangeText={(val) => this.setState({tempIPAddress: val})} style={{ borderBottomWidth: 1}} autoFocus={true}></Dialog.Input>
                         <Dialog.Button label="Cancel" onPress={() => this.setState({showIPDialog: false})} />
                         <Dialog.Button label="OK" onPress={() => this.saveIPData()} />
                     </Dialog.Container>
@@ -99,7 +99,7 @@ export default class ConfigScreen extends React.Component{
                     <Dialog.Container visible={this.state.showDBDialog}>
                         <Dialog.Title children=''>Data Base Key</Dialog.Title>
                         {/* <TextInput value={this.state.currentValue} style={{borderColor: 'black', borderWidth: 1, borderRadius: 5, height: 40, marginHorizontal: 10, paddingHorizontal: 5, marginBottom: 5 }}></TextInput> */}
-                        <Dialog.Input value={this.state.tempDBKey} onChangeText={(val) => this.setState({tempDBKey: val})}></Dialog.Input>
+                        <Dialog.Input value={this.state.tempDBKey} onChangeText={(val) => this.setState({tempDBKey: val})} style={{ borderBottomWidth: 1}} autoFocus={true}></Dialog.Input>
                         <Dialog.Button label="Cancel" onPress={() => this.setState({showDBDialog: false})} />
                         <Dialog.Button label="OK" onPress={() => this.saveDBData()} />
                     </Dialog.Container>

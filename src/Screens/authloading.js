@@ -18,7 +18,8 @@ export default class AuthLoading extends React.Component{
             DBKey: '',
             data: null,
             isLoaded: false,
-            requestFailed: false
+            requestFailed: false,
+            loading: false
         }
 
         this.checkLoggedIn = this.checkLoggedIn.bind(this)
@@ -26,12 +27,17 @@ export default class AuthLoading extends React.Component{
     }
 
     render(){
-        return null
+        return(
+            <View>
+            <Loader loading={this.state.loading} />
+            </View>
+        );
     }
     
     
     componentDidMount = async() =>{
         // this.props.navigation.navigate('App')
+        this.setState({loading: true})
         let credentialPromise =  this.getCredentials();
         let apiPromise = this.getAPIDetails();
         await credentialPromise
@@ -66,6 +72,7 @@ export default class AuthLoading extends React.Component{
 
         if(this.state.username == null || this.state.password == null) {
             console.log('Not Logged In')
+            this.setState({loading: false})
             this.props.navigation.navigate('Auth')
         } else {
             const result = await this.fetchdata();
@@ -73,9 +80,11 @@ export default class AuthLoading extends React.Component{
             if(result != null && this.state.isLoaded && !this.state.requestFailed){
                 await this._saveUser(JSON.stringify(result))
                 console.log('Logged In')
+                this.setState({loading: false})
                 this.props.navigation.navigate('App')
             } else {
                 console.log('Not Logegd In')
+                this.setState({loading: false})
                 this.props.navigation.navigate('Auth')
             }
         }
