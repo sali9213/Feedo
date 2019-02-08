@@ -2,9 +2,9 @@ import React  from "react";
 import { createStackNavigator, createSwitchNavigator, createAppContainer } from "react-navigation";
 
 import SignInScreen from './Screens/signin';
-import ProfileScreen from './Screens/profile';
-import ConfigScreen from "./Screens/config";
-import AuthLoading from "./Screens/authloading"
+import CustomerFeedbackScreen from './Screens/CustomerFeedbackList';
+import ConfigScreen from "./screens/config";
+import AuthLoading from "./screens/authloading"
 
 
 
@@ -24,8 +24,8 @@ export const AuthStack = createStackNavigator({
 },{initialRouteName: 'SignIn'})
 
 export const AppStack = createStackNavigator({
-    Profile: {screen: ProfileScreen}
-},{initialRouteName: 'Profile'})
+    CustomerFeedback: {screen: CustomerFeedbackScreen}
+},{initialRouteName: 'CustomerFeedback'})
 
 export const appContainer = createAppContainer(createSwitchNavigator(
     {

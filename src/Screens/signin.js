@@ -7,7 +7,7 @@ import { SplashScreen } from "expo";
 import  Loader  from "../components/loader";
 
 
-export default class SignInScreen extends React.Component{
+export default class SignInScreen extends React.PureComponent{
     
     constructor(props){
         super(props)
@@ -23,8 +23,11 @@ export default class SignInScreen extends React.Component{
         this.IPAddress = ''
         this.DBKey = ''
 
+        this.renderCount = 0
+
         this._retrieveAPIDetails = this._retrieveAPIDetails.bind(this)
         this.fetchdata = this.fetchdata.bind(this)
+        this.render = this.render.bind(this)
         
     }
 
@@ -68,10 +71,9 @@ export default class SignInScreen extends React.Component{
         this.setState({loading: false})
     }
 
-
-
     render(){
         const {navigate} = this.props.navigation;
+        this.renderCount = this.renderCount + 1
         return(
             <ImageBackground source={require('../../assets/loginbackground.jpg')} style={{width: '100%', height: '100%'}} >
              { this.state.loading && (<Loader loading={this.state.loading} />) }
@@ -89,8 +91,8 @@ export default class SignInScreen extends React.Component{
                 </View>
                 
                 <View style={{width: '80%', flex: 3, justifyContent: 'center'}}>
-                        <TextInput placeholder='USERNAME' autoCapitalize='none' placeholderTextColor='#93A0A7' name='username' style={styles.textbox} onChangeText={(val) => this.setState({username: val})}></TextInput>
-                        <TextInput placeholder='PASSWORD' autoCapitalize='none' placeholderTextColor='#93A0A7' name='password' secureTextEntry style={styles.textbox} onChangeText={(val) => this.setState({password: val})}></TextInput>
+                        <TextInput placeholder='USERNAME' autoCapitalize='none' placeholderTextColor='#93A0A7' name='username' style={styles.textbox} onChangeText={this.handleUsername}></TextInput>
+                        <TextInput placeholder='PASSWORD' autoCapitalize='none' placeholderTextColor='#93A0A7' name='password' secureTextEntry style={styles.textbox} onChangeText={this.handlePassword}></TextInput>
                         <TouchableOpacity onPress={() => this.handleClick(this.state.username, this.state.password)} ref='touch'>
                             <View style = {styles.buttonContainer}>
                                 <Text style = {{color: 'white'}}>LOGIN</Text>
@@ -107,6 +109,18 @@ export default class SignInScreen extends React.Component{
             </ImageBackground>
 
             );
+    }
+
+    handleUsername = (text) => {
+        this.setState({
+            username: text
+        })
+    }
+
+    handlePassword = (text) => {
+        this.setState({
+            password: text
+        })
     }
   
 

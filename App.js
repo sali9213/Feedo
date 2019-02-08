@@ -10,6 +10,9 @@ export default class App extends React.Component{
   constructor(props){
     super(props);
     SplashScreen.preventAutoHide();
+    this.state = {
+      user: null
+    }
   }
   
   static navigationOptions = {
@@ -18,7 +21,7 @@ export default class App extends React.Component{
 
   render(){
       return(
-        <AppContainer /> //Will need to add auth loadign navigator
+        <AppContainer />
       );
   }
 
