@@ -3,6 +3,11 @@ import { createStackNavigator, createAppContainer } from 'react-navigation';
 import { Button, Text } from "react-native";
 import  AppContainer  from "./src/routes.js";
 import { SplashScreen } from "expo";
+import { Provider } from "react-redux";
+import configureStore from "./store";
+
+
+const store = configureStore()
 
 
 export default class App extends React.Component{
@@ -21,7 +26,9 @@ export default class App extends React.Component{
 
   render(){
       return(
-        <AppContainer />
+        <Provider store = { store }>
+          <AppContainer />
+        </Provider>
       );
   }
 

@@ -1,8 +1,8 @@
 import { SAVE_USER } from "./types";
 
-export const addUser = userObject => {
+export const saveUser = userObject => {
     return {
-        type: ADD_USER,
+        type: SAVE_USER,
         payload: userObject
     }
 }

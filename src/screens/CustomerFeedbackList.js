@@ -3,9 +3,10 @@ import { View, TextInput, Text, TouchableOpacity, AsyncStorage } from "react-nat
 import { SignInScreen } from "./signin";
 import { stylesheet } from "../Styles/stylesheet";
 import { SplashScreen } from "expo";
+import { connect } from "react-redux";
 
 
-export default class CustomerFeedbackListScreen extends React.Component{
+class CustomerFeedbackListScreen extends React.Component{
 
     static navigationOptions = {
         title : 'Logged In',
@@ -30,7 +31,7 @@ export default class CustomerFeedbackListScreen extends React.Component{
         const { navigate } = this.props.navigation;
         return(
             <View>
-            <Text>EmployeeName: { this.state.user.EmployeeName }</Text>
+            <Text>EmployeeName: { this.props.user.EmployeeName }</Text>
             <TouchableOpacity onPress={() => navigate('Auth', {})}>
                 <View style = {stylesheet.buttonContainer}>
                     <Text style = {{color: 'white'}}>Logout</Text>
@@ -42,6 +43,7 @@ export default class CustomerFeedbackListScreen extends React.Component{
 
 
     _init = async () => {
+        console.log(this.props.user)
         try {
         console.log('Getting User')
         this.setState({
@@ -54,3 +56,13 @@ export default class CustomerFeedbackListScreen extends React.Component{
         }
       };
 }
+
+
+const mapStateToProps = state => {
+    return {
+      user: state.userInfo.user
+    }
+  }
+  
+  
+  export default connect(mapStateToProps, null)(CustomerFeedbackListScreen)

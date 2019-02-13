@@ -5,9 +5,11 @@ import { TextInput, View, Button, Text, TouchableOpacity,
 import { base64 } from "base-64";
 import { SplashScreen } from "expo";
 import  Loader  from "../components/loader";
+import { connect } from "react-redux";
+import { saveUser } from "../actions/user";
 
 
-export default class SignInScreen extends React.PureComponent{
+class SignInScreen extends React.PureComponent{
     
     constructor(props){
         super(props)
@@ -50,18 +52,9 @@ export default class SignInScreen extends React.PureComponent{
         }
       };
 
-    _saveUser = async (user) => {
-    try {
-    if(user == null)
-    { user = ''; }
-        await AsyncStorage.setItem('user', user);
-        await AsyncStorage.setItem('username', this.state.username)
-        await AsyncStorage.setItem('password', this.state.password)
-    } catch (error) {
-        // Error saving data
-        console.error(error)
-    }
-    };
+    // _saveUser = async (user) => {
+        // this.props.save(user)
+    // };
 
     componentDidMount() {
         SplashScreen.hide();
@@ -135,7 +128,8 @@ export default class SignInScreen extends React.PureComponent{
 
         if(result != null && this.state.isLoaded && !this.state.requestFailed){
 
-        this._saveUser(JSON.stringify(result))
+        this.props.saveUser(result) //saving to redux store
+
         this.props.navigation.navigate('App')
             
 
@@ -157,9 +151,9 @@ export default class SignInScreen extends React.PureComponent{
     async fetchdata (user, pass) {
         // const url = 'http://192.168.1.26:8919/TSBE/User/FSigninMobileApp';
 
-        //   //Only for debugging. Removes need of entering user and pass 
-        //   user = 'superuser'
-        //   pass = 'techSupport20177'
+          //Only for debugging. Removes need of entering user and pass 
+          user = 'superuser'
+          pass = 'techSupport20177'
 
 
         const url = 'http://' + this.IPAddress + '/TSBE/User/FSigninMobileApp';
@@ -257,3 +251,19 @@ const styles = StyleSheet.create({
     //     margin: 10
     //   }
 });
+
+const mapStateToProps = state => {
+    return {
+      user: state.user
+    }
+  }
+  
+  const mapDispatchToProps = dispatch => {
+    return {
+      saveUser: (user) => {
+        dispatch(saveUser(user))
+      }
+    }
+  }
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(SignInScreen)
