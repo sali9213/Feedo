@@ -1,10 +1,10 @@
 import React  from "react";
 import { createStackNavigator, createSwitchNavigator, createAppContainer } from "react-navigation";
 
-import SignInScreen from './screens/signin';
+import SignInScreen from './screens/SignIn';
 import CustomerFeedbackListScreen from './screens/CustomerFeedbackList';
-import ConfigScreen from "./screens/config";
-import AuthLoading from "./screens/authloading"
+import ConfigScreen from "./screens/Config";
+import AuthLoading from "./screens/AuthLoading"
 
 
 

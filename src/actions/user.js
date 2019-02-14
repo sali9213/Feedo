@@ -1,4 +1,4 @@
-import { SAVE_USER } from "./types";
+import { SAVE_USER } from "./Types";
 
 export const saveUser = userObject => {
     return {

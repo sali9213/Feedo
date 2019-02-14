@@ -6,7 +6,8 @@ import { base64 } from "base-64";
 import { SplashScreen } from "expo";
 import  Loader  from "../components/loader";
 import { connect } from "react-redux";
-import { saveUser } from "../actions/user";
+import { saveUser } from "../actions/User";
+import { saveAPIConfig } from "../actions/APIConfig"
 
 
 class SignInScreen extends React.PureComponent{
@@ -121,13 +122,13 @@ class SignInScreen extends React.PureComponent{
 
         await this._retrieveAPIDetails()
 
+        console.log(this.props.IPAddress + ' ' + this.props.DBKey)
         this.setState({loading: true})
         const result = await this.fetchdata(user, pass);
         this.setState({loading: false})
         this.forceUpdate()
 
         if(result != null && this.state.isLoaded && !this.state.requestFailed){
-
         this.props.saveUser(result) //saving to redux store
 
         this.props.navigation.navigate('App')
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         resizeMode: 'cover'
-    },
+      }
     // settingContainer: {
     //     backgroundColor: 'transparent', 
     //     alignItems: 'center', 
@@ -254,16 +255,14 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-      user: state.user
+      IPAddress: state.APIConfigInfo.IPAddress,
+      DBKEy: state.APIConfigInfo.DBKEy
     }
   }
   
-  const mapDispatchToProps = dispatch => {
-    return {
-      saveUser: (user) => {
-        dispatch(saveUser(user))
-      }
-    }
-  }
-  
+  const mapDispatchToProps = dispatch => ({
+        saveUser: (user) => dispatch(saveUser(user)),
+        saveAPIConfig: (IPAddress, DBKey) => dispatch(saveAPIConfig(IPAddress, DBKey))
+  });
+
   export default connect(mapStateToProps, mapDispatchToProps)(SignInScreen)

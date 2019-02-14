@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, TextInput, Text, TouchableOpacity, AsyncStorage } from "react-native";
-import { SignInScreen } from "./signin";
+// import { SignInScreen } from "./SignIn";
 import { stylesheet } from "../Styles/stylesheet";
 import { SplashScreen } from "expo";
 import { connect } from "react-redux";
@@ -41,20 +41,6 @@ class CustomerFeedbackListScreen extends React.Component{
         );
     }
 
-
-    _init = async () => {
-        console.log(this.props.user)
-        try {
-        console.log('Getting User')
-        this.setState({
-            user: JSON.parse(await AsyncStorage.getItem('user'))
-        }) 
-        console.log('Got User')
-        } catch (error) {
-          // Error retrieving data
-          console.error(error)
-        }
-      };
 }
 
 

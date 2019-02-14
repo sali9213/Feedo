@@ -1,9 +1,11 @@
 import { createStore, combineReducers } from "redux";
-import { userReducer } from "./src/reducers/userReducer";
+import { userReducer } from "./src/reducers/UserReducer";
+import { APIConfigReducer } from "./src/reducers/APIConfigReducer";
 import { devToolsEnhancer } from "redux-devtools-extension";
 
 const rootReducer = combineReducers({
-    userInfo: userReducer
+    userInfo: userReducer,
+    APIConfigInfo: APIConfigReducer
 })
 
 const configureStore = () => {

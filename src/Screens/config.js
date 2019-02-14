@@ -5,8 +5,10 @@ import { stylesheet } from "../Styles/stylesheet";
 import { SplashScreen } from 'expo';
 import Dialog from 'react-native-dialog';
 import { TextField } from "react-native-material-textfield";
+import { saveAPIConfig } from "../actions/APIConfig";
+import { connect } from "react-redux";
 
-export default class ConfigScreen extends React.Component{
+class ConfigScreen extends React.Component{
 
     constructor(props){
         super(props)
@@ -31,6 +33,7 @@ export default class ConfigScreen extends React.Component{
             showIPDialog: false
         }, function() {
 
+            this.props.saveAPIConfig(this.state.IPAddress, this.this.state.DBKey)
             this._storeData(this.state.IPAddress, this.state.DBKey)
 
         })
@@ -160,3 +163,15 @@ const styles = StyleSheet.create({
         padding: 10,
     }
   });
+
+  const mapStateToProps = state => {
+    return {
+      config: state.APIConfigInfo
+    }
+  }
+  
+  const mapDispatchToProps = dispatch => ({
+        saveAPIConfig: (IPAddress, DBKey) => dispatch(saveAPIConfig(IPAddress, DBKey))
+  });
+
+  export default connect(mapStateToProps, mapDispatchToProps)(ConfigScreen)

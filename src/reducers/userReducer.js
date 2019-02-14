@@ -1,4 +1,4 @@
-import { SAVE_USER } from "../actions/types";
+import { SAVE_USER } from "../actions/Types";
 
 const initialState = {
     user: null
