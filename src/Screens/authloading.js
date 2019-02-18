@@ -5,9 +5,11 @@ import { TextInput, View, Button, Text, Alert, TouchableOpacity,
 import { base64 } from "base-64";
 import { SplashScreen } from "expo";
 import  Loader  from "../components/loader";
+import { connect } from "react-redux";
+import { saveUser } from "../actions/User";
 
 
-export default class AuthLoading extends React.Component{
+class AuthLoading extends React.Component{
 
     constructor(props){
         super(props)
@@ -39,9 +41,9 @@ export default class AuthLoading extends React.Component{
         // this.props.navigation.navigate('App')
         this.setState({loading: true})
         let credentialPromise =  this.getCredentials();
-        let apiPromise = this.getAPIDetails();
+        // let apiPromise = this.getAPIDetails();
         await credentialPromise
-        await apiPromise
+        // await apiPromise
         await this.checkLoggedIn()
     }
 
@@ -56,36 +58,43 @@ export default class AuthLoading extends React.Component{
         }
     }
 
-    getAPIDetails = async() => {
-             try {
-            this.setState({
-                IPAddress: await  AsyncStorage.getItem('ipaddress'),
-                DBKey: await AsyncStorage.getItem('dbkey')                
-            })
-        } catch (error) {
-            console.error(error)
-        }
-    }
+    // getAPIDetails = async() => {
+    //          try {
+    //         this.setState({
+    //             IPAddress: await  AsyncStorage.getItem('ipaddress'),
+    //             DBKey: await AsyncStorage.getItem('dbkey')                
+    //         })
+    //     } catch (error) {
+    //         console.error(error)
+    //     }
+    // }
 
     checkLoggedIn = async() => {
 
 
         if(this.state.username == null || this.state.password == null) {
-            console.log('Not Logged In')
+
+            console.log('Not Logged In: ' + this.state.username)
             this.setState({loading: false})
             this.props.navigation.navigate('Auth')
-        } else {
-            const result = await this.fetchdata();
 
-            if(result != null && this.state.isLoaded && !this.state.requestFailed){
-                await this._saveUser(JSON.stringify(result))
+        } else {
+
+            const response = await this.fetchdata();
+
+            if(response != null && this.state.isLoaded && !this.state.requestFailed){
+
+                this.props.saveUser(response);
                 console.log('Logged In')
                 this.setState({loading: false})
                 this.props.navigation.navigate('App')
+
             } else {
+
                 console.log('Not Logegd In')
                 this.setState({loading: false})
                 this.props.navigation.navigate('Auth')
+
             }
         }
 
@@ -93,17 +102,15 @@ export default class AuthLoading extends React.Component{
 
     }
 
-      _saveUser = async (user) => {
-        try {
-        if(user == null) user = '';
-            await AsyncStorage.setItem('user', user);
-            await AsyncStorage.setItem('username', this.state.username)
-            await AsyncStorage.setItem('password', this.state.password)
-        } catch (error) {
-            // Error saving data
-            console.error(error)
-        }
-        };
+    //   _saveUser = async (user) => {
+    //     try {
+    //         await AsyncStorage.setItem('username', this.state.username)
+    //         await AsyncStorage.setItem('password', this.state.password)
+    //     } catch (error) {
+    //         // Error saving data
+    //         console.error(error)
+    //     }
+    //     };
 
       async fetchdata () {
         // const url = 'http://192.168.1.26:8919/TSBE/User/FSigninMobileApp';
@@ -113,7 +120,7 @@ export default class AuthLoading extends React.Component{
         //   pass = 'techSupport20177'
         console.log('start fetching')
 
-        const url = 'http://' + this.state.IPAddress + '/TSBE/User/FSigninMobileApp';
+        const url = 'http://' + this.props.config.IPAddress + '/TSBE/User/FSigninMobileApp';
         var base64 = require("base-64");
         let base64String = 'Basic ' + base64.encode(this.state.username+":"+this.state.password);
 
@@ -124,7 +131,7 @@ export default class AuthLoading extends React.Component{
                 "Content-Type": 'application/json',
                 "Authorization": base64String,
                 "app": "6289",
-                "ts": this.state.DBKey,
+                "ts": this.props.config.DBKey,
         },
         body: JSON.stringify({
             "Browser": "Native_Platform",
@@ -169,3 +176,16 @@ export default class AuthLoading extends React.Component{
 
 
 }
+
+
+const mapStateToProps = state => {
+    return {
+      config: state.APIConfigInfo
+    }
+  }
+
+  const mapDispatchToProps = dispatch => ({
+    saveUser: (user) => dispatch(saveUser(user)),
+});
+
+  export default connect(mapStateToProps, mapDispatchToProps)(AuthLoading)

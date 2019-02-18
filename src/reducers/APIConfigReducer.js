@@ -8,7 +8,7 @@ const initialState = {
 export const APIConfigReducer = (state = initialState, action) => {
     switch(action.type){
         case SAVE_API_CONFIG:
-            console.log(action)
+            console.log('action: ' + action)
             return { IPAddress: action.payload.IPAddress, DBKey: action.payload.DBKey }; 
         default: 
             return state;

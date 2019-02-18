@@ -23,7 +23,7 @@ class ConfigScreen extends React.Component{
     }
 
     componentDidMount = async() =>{
-        await this._retrieveData();
+        // await this._retrieveData();
     }
 
 
@@ -33,8 +33,7 @@ class ConfigScreen extends React.Component{
             showIPDialog: false
         }, function() {
 
-            this.props.saveAPIConfig(this.state.IPAddress, this.this.state.DBKey)
-            this._storeData(this.state.IPAddress, this.state.DBKey)
+            this.props.saveAPIConfig(this.state.IPAddress, this.state.DBKey)
 
         })
     }
@@ -43,9 +42,9 @@ class ConfigScreen extends React.Component{
         this.setState({
             DBKey: this.state.tempDBKey,
             showDBDialog: false
-        }, function() {
+        }, function() { 
 
-            this._storeData(this.state.IPAddress, this.state.DBKey)
+            this.props.saveAPIConfig(this.state.IPAddress, this.this.state.DBKey)
 
         })
     }
@@ -53,14 +52,14 @@ class ConfigScreen extends React.Component{
    editIP(visible) {
         this.setState({
             showIPDialog: visible,
-            tempIPAddress: this.state.IPAddress
+            tempIPAddress: this.props.config.IPAddress
          });
       }
 
     editDB(visible) {
         this.setState({
             showDBDialog: visible,
-            tempDBKey: this.state.DBKey
+            tempDBKey: this.props.config.DBKey
             });
     }
 
@@ -75,14 +74,14 @@ class ConfigScreen extends React.Component{
 
                     <TouchableOpacity onPress={() => this.editIP(true)} >
                         <View pointerEvents="none">
-                    <TextField label="Web API URL" editable={false} value={this.state.IPAddress} ></TextField>
+                    <TextField label="Web API URL" editable={false} value={this.props.config.IPAddress} ></TextField>
                         </View>
                     </TouchableOpacity>
 
 
                     <TouchableOpacity onPress={() => this.editDB(true)} >
                         <View pointerEvents="none">     
-                            <TextField label="Databse Key" editable={false} value={this.state.DBKey}></TextField>
+                            <TextField label="Databse Key" editable={false} value={this.props.config.DBKey}></TextField>
                         </View>
                     </TouchableOpacity>
 
@@ -113,30 +112,30 @@ class ConfigScreen extends React.Component{
         );
     }
 
-    _storeData = async (ipaddress, dbkey) => {
-        try {
-        if(ipaddress == null) ipaddress = '';
-        if(dbkey == null) dbkey = '';
-          await AsyncStorage.setItem('ipaddress', ipaddress);
-          await AsyncStorage.setItem('dbkey', dbkey)
-        } catch (error) {
-          // Error saving data
-          console.error(error)
-        }
-      };
+    // _storeData = async (ipaddress, dbkey) => {
+    //     try {
+    //     if(ipaddress == null) ipaddress = '';
+    //     if(dbkey == null) dbkey = '';
+    //       await AsyncStorage.setItem('ipaddress', ipaddress);
+    //       await AsyncStorage.setItem('dbkey', dbkey)
+    //     } catch (error) {
+    //       // Error saving data
+    //       console.error(error)
+    //     }
+    //   };
 
-      _retrieveData = async () => {
-        try {
-        this.setState({
-            IPAddress:  await AsyncStorage.getItem('ipaddress'),
-            DBKey: await AsyncStorage.getItem('dbkey')
-        })
-        } catch (error) {
-          // Error retrieving data
-          console.error(error)
-        }
+    //   _retrieveData = async () => {
+    //     try {
+    //     this.setState({
+    //         IPAddress:  await AsyncStorage.getItem('ipaddress'),
+    //         DBKey: await AsyncStorage.getItem('dbkey')
+    //     })
+    //     } catch (error) {
+    //       // Error retrieving data
+    //       console.error(error)
+    //     }
 
-      };
+    //   };
 }
 
 

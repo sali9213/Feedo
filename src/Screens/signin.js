@@ -8,6 +8,7 @@ import  Loader  from "../components/loader";
 import { connect } from "react-redux";
 import { saveUser } from "../actions/User";
 import { saveAPIConfig } from "../actions/APIConfig"
+import { fetchdata } from "../helpers/RequestAPI";
 
 
 class SignInScreen extends React.PureComponent{
@@ -53,9 +54,19 @@ class SignInScreen extends React.PureComponent{
         }
       };
 
-    // _saveUser = async (user) => {
-        // this.props.save(user)
-    // };
+    _saveUserCredentials = async () => {
+        try {   
+                console.log(this.state.username + 'in save user credentials')
+                await AsyncStorage.setItem('username', this.state.username)
+                await AsyncStorage.setItem('password', this.state.password)
+
+            } catch (error) {
+
+                // Error saving data
+                console.error(error)
+
+            }    
+    };
 
     componentDidMount() {
         SplashScreen.hide();
@@ -130,7 +141,7 @@ class SignInScreen extends React.PureComponent{
 
         if(result != null && this.state.isLoaded && !this.state.requestFailed){
         this.props.saveUser(result) //saving to redux store
-
+        await this._saveUserCredentials()
         this.props.navigation.navigate('App')
             
 
