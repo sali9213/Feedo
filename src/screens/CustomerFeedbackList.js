@@ -47,8 +47,14 @@ class CustomerFeedbackListScreen extends React.Component{
                 data={this.state.data}
                 showsVerticalScrollIndicator={false}
                 renderItem={({item}) =>
-                <View>
-                    <Text>{item.Question + ' ' + item.AcceptanceByName}</Text>
+                <View style={{flexdirection: 'column', justifyContent: 'space-evenly', borderBottomWidth: 1}} >
+                    <Text style={{textAlign: 'center'}}>{item.Question}</Text>
+                    <Text>{item.CustomerName}</Text>
+                    <Text>{item.ContactNo}</Text>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Text>{item.AcceptanceByName}</Text>
+                        <Text>{item.DataEntryDate}</Text>
+                    </View>
                 </View>
                 }
                 keyExtractor={item => String(item.CustomerFeedbackId)}/>
